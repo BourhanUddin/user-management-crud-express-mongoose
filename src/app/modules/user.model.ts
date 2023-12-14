@@ -1,5 +1,5 @@
-import { Schema } from 'mongoose';
-import { IUser, address, orders } from './user/user.interface';
+import { Schema, model } from 'mongoose';
+import { IUser, address } from './user/user.interface';
 
 const addressSchema = new Schema<address>({
   street: {
@@ -15,20 +15,21 @@ const addressSchema = new Schema<address>({
     required: true,
   },
 });
-const orderSchema = new Schema<orders>({
-  productName: {
-    type: String,
-    required: true,
-  },
-  price: {
-    type: Number,
-    required: true,
-  },
-  quantity: {
-    type: Number,
-    required: true,
-  },
-});
+// const orderSchema = new Schema<orders>({
+//   productName: {
+//     type: String,
+//     required: true,
+//   },
+//   price: {
+//     type: Number,
+//     required: true,
+//   },
+//   quantity: {
+//     type: Number,
+//     required: true,
+//   },
+// });
+
 const userSchema = new Schema<IUser>({
   userId: {
     type: Number,
@@ -70,5 +71,7 @@ const userSchema = new Schema<IUser>({
     type: [String],
   },
   address: addressSchema,
-  orders: orderSchema,
+  //   orders: orderSchema,
 });
+
+export const UserModel = model<IUser>('User', userSchema);
