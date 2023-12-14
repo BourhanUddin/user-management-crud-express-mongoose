@@ -1,5 +1,3 @@
-import { Schema, model, connect } from 'mongoose';
-
 export type fullName = {
   firstName: string;
   lastName: string;
@@ -22,7 +20,7 @@ export type IUser = {
   fullName: fullName;
   age: number;
   email: string;
-  isActive: 'active' | 'inActive';
+  isActive: boolean;
   hobbies: string[];
   address: address;
   orders: orders;
