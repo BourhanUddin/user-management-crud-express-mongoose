@@ -20,8 +20,24 @@ const getSingleUserFromDB = async (userId: string) => {
   const result = await UserModel.findOne({ userId });
   return result;
 };
+const deleteSingleUserFromDB = async (userId: string) => {
+  try {
+    const result = await UserModel.deleteOne({ userId });
+    if (result.deletedCount === 1) {
+      console.log('User deleted successfully');
+      return result;
+    } else {
+      console.log(userId, 'User not found');
+      return null;
+    }
+  } catch (error) {
+    console.error('Error deleting user:', error);
+    throw error;
+  }
+};
 export const UserServices = {
   createUserIntoDB,
   getAllUsersFromDB,
   getSingleUserFromDB,
+  deleteSingleUserFromDB,
 };
