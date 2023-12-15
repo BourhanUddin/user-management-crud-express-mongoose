@@ -9,8 +9,9 @@ app.use(cors());
 //application routes
 app.use('/api/users', UserRoutes);
 
-app.get('/', (req: Request, res: Response) => {
+const getAController = (req: Request, res: Response) => {
   res.send('Hello World!');
-});
+};
+app.get('/', getAController);
 
 export default app;
