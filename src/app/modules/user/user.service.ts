@@ -35,9 +35,31 @@ const deleteSingleUserFromDB = async (userId: string) => {
     throw error;
   }
 };
+
+const updateSingleUserFromDB = async (
+  userId: number,
+  updatedData: Partial<IUser>,
+) => {
+  try {
+    const result = await UserModel.updateOne({ userId }, { $set: updatedData });
+
+    if (result.modifiedCount === 1) {
+      console.log('User updated successfully');
+      return result;
+    } else {
+      console.log(userId, 'User not found or no changes were made');
+      return null;
+    }
+  } catch (error) {
+    console.error('Error updating user:', error);
+    throw error;
+  }
+};
+
 export const UserServices = {
   createUserIntoDB,
   getAllUsersFromDB,
   getSingleUserFromDB,
   deleteSingleUserFromDB,
+  updateSingleUserFromDB,
 };

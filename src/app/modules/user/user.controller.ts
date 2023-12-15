@@ -68,9 +68,42 @@ const deletesingleUser = async (req: Request, res: Response) => {
     console.log(error);
   }
 };
+const updateSingleUser = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    const result = await UserServices.updateSingleUserFromDB(
+      Number(userId),
+      req.body,
+    );
+    // Assuming req.body contains the updated data for the user
+
+    if (result) {
+      res.status(200).json({
+        success: true,
+        message: 'User is updated successfully',
+        data: result,
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        message: 'User not found or no changes were made',
+        data: null,
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: 'Internal Server Error',
+      data: null,
+    });
+  }
+};
+
 export const UserControllers = {
   createUser,
   getAllUsers,
   getsingleUser,
   deletesingleUser,
+  updateSingleUser,
 };

@@ -15,6 +15,54 @@ const addressSchema = new Schema<address>({
     required: true,
   },
 });
+
+const userSchema = new Schema<IUser>({
+  userId: {
+    type: Number,
+    unique: true,
+  },
+  username: {
+    type: String,
+    unique: true,
+    required: [true, 'Username is required.'],
+  },
+  password: {
+    type: String,
+    required: [true, 'Password is required.'],
+  },
+  fullName: {
+    firstName: {
+      type: String,
+      required: [true, 'First name is required.'],
+    },
+    lastName: {
+      type: String,
+      required: [true, 'Last name is required.'],
+    },
+  },
+  age: {
+    type: Number,
+    required: [true, 'Age is required.'],
+  },
+  email: {
+    type: String,
+    required: [true, 'Email is required.'],
+
+    unique: true,
+  },
+  isActive: {
+    type: Boolean,
+    default: true,
+  },
+  hobbies: {
+    type: [String],
+  },
+  address: addressSchema,
+});
+
+export const UserModel = model<IUser>('User', userSchema);
+
+//   orders: orderSchema,
 // const orderSchema = new Schema<orders>({
 //   productName: {
 //     type: String,
@@ -29,49 +77,3 @@ const addressSchema = new Schema<address>({
 //     required: true,
 //   },
 // });
-
-const userSchema = new Schema<IUser>({
-  userId: {
-    type: Number,
-    unique: true,
-  },
-  username: {
-    type: String,
-    unique: true,
-    required: true,
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-  fullName: {
-    firstName: {
-      type: String,
-      required: true,
-    },
-    lastName: {
-      type: String,
-      required: true,
-    },
-  },
-  age: {
-    type: Number,
-    required: true,
-  },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  isActive: {
-    type: Boolean,
-    default: true,
-  },
-  hobbies: {
-    type: [String],
-  },
-  address: addressSchema,
-  //   orders: orderSchema,
-});
-
-export const UserModel = model<IUser>('User', userSchema);
