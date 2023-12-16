@@ -1,18 +1,19 @@
 import { Request, Response } from 'express';
 import { UserServices } from './user.service';
-
+import userValidationSchema from './user.validation';
 const createUser = async (req: Request, res: Response) => {
   try {
-    console.log('Received request body:', req.body);
-
     const { user: userData } = req.body;
 
-    console.log('Extracted user data:', userData);
-
+    const { error } = userValidationSchema.validate(userData);
     const result = await UserServices.createUserIntoDB(userData);
-
-    console.log('Result from service:', result);
-
+    if (error) {
+      res.status(500).json({
+        success: false,
+        message: 'something went wrong',
+        error: error.details,
+      });
+    }
     res.status(200).json({
       success: true,
       message: 'user created successfully',
@@ -75,9 +76,8 @@ const updateSingleUser = async (req: Request, res: Response) => {
       Number(userId),
       req.body,
     );
-    // Assuming req.body contains the updated data for the user
 
-    if (result) {
+    if (result && result.matchedCount > 0) {
       res.status(200).json({
         success: true,
         message: 'User is updated successfully',
@@ -91,7 +91,6 @@ const updateSingleUser = async (req: Request, res: Response) => {
       });
     }
   } catch (error) {
-    console.error(error);
     res.status(500).json({
       success: false,
       message: 'Internal Server Error',

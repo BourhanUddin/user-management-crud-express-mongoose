@@ -35,23 +35,28 @@ const deleteSingleUserFromDB = async (userId: string) => {
     throw error;
   }
 };
-
 const updateSingleUserFromDB = async (
   userId: number,
   updatedData: Partial<IUser>,
 ) => {
   try {
-    const result = await UserModel.updateOne({ userId }, { $set: updatedData });
+    const result = await UserModel.updateOne(
+      { userId: userId },
+      { $set: updatedData },
+    );
 
-    if (result.modifiedCount === 1) {
+    console.log('Update Result:', result);
+
+    if (result && result.modifiedCount === 1) {
       console.log('User updated successfully');
       return result;
     } else {
       console.log(userId, 'User not found or no changes were made');
       return null;
     }
-  } catch (error) {
-    console.error('Error updating user:', error);
+  } catch (error: any) {
+    console.error('Error updating user:', error.message);
+    console.error('Error details:', error);
     throw error;
   }
 };
