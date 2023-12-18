@@ -43,6 +43,7 @@ const updateSingleUserFromDB = async (
     const result = await UserModel.updateOne(
       { userId: userId },
       { $set: updatedData },
+      { upsert: true },
     );
 
     console.log('Update Result:', result);

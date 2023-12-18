@@ -1,4 +1,6 @@
+import bcrypt from 'bcrypt';
 import { Schema, model } from 'mongoose';
+import config from '../config';
 import { IUser, address } from './user/user.interface';
 
 const addressSchema = new Schema<address>({
@@ -58,21 +60,22 @@ const userSchema = new Schema<IUser>({
   },
   address: addressSchema,
 });
-
+//pre save middleware
+userSchema.pre('save', async function (next) {
+  // console.log(this, 'pre middleware will save the data ');
+  // eslint-disable-next-line @typescript-eslint/no-this-alias
+  const user = this;
+  // hashin password and save into DB
+  user.password = await bcrypt.hash(
+    user.password,
+    Number(config.bcrypt_salt_rounds),
+  );
+  next();
+});
+// post save middleware
+userSchema.post('save', function (doc, next) {
+  // console.log(this, 'post middleware saved the data ');
+  doc.password = ''; //show password as empty string
+  next();
+});
 export const UserModel = model<IUser>('User', userSchema);
-
-//   orders: orderSchema,
-// const orderSchema = new Schema<orders>({
-//   productName: {
-//     type: String,
-//     required: true,
-//   },
-//   price: {
-//     type: Number,
-//     required: true,
-//   },
-//   quantity: {
-//     type: Number,
-//     required: true,
-//   },
-// });

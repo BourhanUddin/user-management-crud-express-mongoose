@@ -66,7 +66,11 @@ const deletesingleUser = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error) {
-    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: 'user not found !',
+      data: null,
+    });
   }
 };
 const updateSingleUser = async (req: Request, res: Response) => {
