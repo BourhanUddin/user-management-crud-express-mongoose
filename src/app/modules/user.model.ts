@@ -65,7 +65,7 @@ userSchema.pre('save', async function (next) {
   // console.log(this, 'pre middleware will save the data ');
   // eslint-disable-next-line @typescript-eslint/no-this-alias
   const user = this;
-  // hashin password and save into DB
+  // hashing password and save into DB
   user.password = await bcrypt.hash(
     user.password,
     Number(config.bcrypt_salt_rounds),
@@ -78,4 +78,13 @@ userSchema.post('save', function (doc, next) {
   doc.password = ''; //show password as empty string
   next();
 });
+
+// Define a toJSON transform to exclude the password field
+userSchema.set('toJSON', {
+  transform: function (doc, ret) {
+    delete ret.password;
+    return ret;
+  },
+});
+
 export const UserModel = model<IUser>('User', userSchema);
